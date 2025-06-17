@@ -1,1 +1,66 @@
+from pathlib import Path
+import os
 
+subjects = {
+        "English" : 0,
+        "Maths" : 0,
+        "Urdu" : 0,
+    }
+
+average = lambda Eng , Maths, Urdu: (Eng + Maths + Urdu)/3
+
+
+def CalculateGrade(avg):
+
+    if(avg >= 80):
+        return 'A'
+    elif(60 <= avg <= 79):
+        return 'B'
+    elif(40 <= avg <= 59):
+        return 'C'
+    else:
+        return 'D'
+    
+def WriteToFile(Name , Age , Eng , Maths , Urdu , Average , grade):
+    filename = Name + ".txt"
+    with open(filename , "w") as f:
+        f.write("Name : " + Name + "\n")
+        f.write("Age : " + str(Age) + "\n")
+        f.write("English : " + str(Eng) + "\n")
+        f.write("Maths : " + str(Maths) + "\n")
+        f.write("Urdu : " + str(Urdu) + "\n")
+        f.write("Average : " + str(Average) + "\n")
+        f.write("Grade : " + str(grade) + "\n")
+
+def ReadFromFile(Name):
+    filename = Name + ".txt"
+    file = Path(filename)
+    if file.exists():
+        with open(filename , "r") as f:
+            print(f.read())
+
+    else:
+        print("File doesnt exist \n")
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def main():
+    Name = input("Enter Name : ")
+    age = int(input("Enter Age : "))
+    print("Enter grade for subjects : ")
+    subjects["English"] = int(input("English : "))
+    subjects["Maths"] = int(input("Maths : "))
+    subjects["Urdu"] = int(input("Urdu : "))
+    
+    avg = average(subjects["English"] , subjects["Maths"] , subjects["Urdu"])
+    grade = CalculateGrade(avg)
+    
+    clear_screen()
+
+    WriteToFile(Name ,age , subjects["English"] , subjects["Maths"] , subjects["Urdu"] , avg , grade)
+
+    ReadFromFile(Name)
+
+
+main()
