@@ -22,8 +22,12 @@ def CalculateGrade(avg):
         return 'D'
     
 def WriteToFile(Name , Age , Eng , Maths , Urdu , Average , grade):
+    file_path = Path(__file__).parent
+    report_file = file_path / "Students"
+    report_file.mkdir(exist_ok= True)
     filename = Name + ".txt"
-    with open(filename , "w") as f:
+    Report_path = report_file / filename
+    with open(Report_path , "w") as f:
         f.write("Name : " + Name + "\n")
         f.write("Age : " + str(Age) + "\n")
         f.write("English : " + str(Eng) + "\n")
@@ -33,14 +37,17 @@ def WriteToFile(Name , Age , Eng , Maths , Urdu , Average , grade):
         f.write("Grade : " + str(grade) + "\n")
 
 def ReadFromFile(Name):
+    file_path = Path(__file__).parent
+    report_file = file_path / "Students"
     filename = Name + ".txt"
-    file = Path(filename)
-    if file.exists():
-        with open(filename , "r") as f:
-            print(f.read())
+    Report_path = report_file / filename
 
+    if Report_path.exists():
+        with open(Report_path, "r") as f:
+            print(f.read())
     else:
-        print("File doesnt exist \n")
+        print("File doesn't exist\n")
+
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -49,10 +56,22 @@ def main():
     Name = input("Enter Name : ")
     age = int(input("Enter Age : "))
     print("Enter grade for subjects : ")
-    subjects["English"] = int(input("English : "))
-    subjects["Maths"] = int(input("Maths : "))
-    subjects["Urdu"] = int(input("Urdu : "))
     
+    subjects["English"] = int(input("English : "))
+    while (subjects["English"] < 0 or subjects["English"] > 100):
+        print("Re-enter valid marks : ")
+        subjects["English"] = int(input("English : "))
+
+    subjects["Maths"] = int(input("Maths : "))
+    while( subjects["Maths"] < 0 or subjects["Maths"] > 100):
+        print("Re-enter valid marks : ")
+        subjects["Maths"] = int(input("Maths : "))
+
+    subjects["Urdu"] = int(input("Urdu : "))
+    while (subjects["Urdu"] < 0 or subjects["Urdu"] > 100):
+        print("Re-enter valid marks : ")
+        subjects["Urdu"] = int(input("Urdu : "))
+
     avg = average(subjects["English"] , subjects["Maths"] , subjects["Urdu"])
     grade = CalculateGrade(avg)
     
